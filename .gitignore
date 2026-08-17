@@ -1,0 +1,33 @@
+# 依赖（CloudStudio 会自动 npm install）
+node_modules/
+
+# 内置 Node 运行时（仅本地免装版用，CloudStudio 自带 Node）
+bin/
+
+# 私密记忆 / AI 数据
+.workbuddy/
+
+# 临时上传与构建产物
+uploads/
+dist/
+
+# 压缩包与本地打包脚本
+*.zip
+pack.py
+
+# 开发素材（非运行必需）
+*.docx
+*.pdf
+背景.png
+微信图片_*.jpg
+convert_template.py
+generate_template.py
+preview_certificate.py
+demo_gen.js
+prd.txt
+
+# 演示数据（本地演示用，不纳入版本库）
+演示数据.xlsx
+
+# 学员敏感数据：部署后 server.js 会自动生成空表，不纳入版本库
+data/students.json

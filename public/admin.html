@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>证书管理系统 - 管理后台</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- 登录页 -->
+  <div class="login-container" id="loginSection">
+    <div class="login-card">
+      <div class="logo" style="text-align:center;margin-bottom:16px;">
+        <div class="logo-icon">&#128274;</div>
+      </div>
+      <h1>管理后台登录</h1>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>管理密码</label>
+          <input type="password" id="loginPassword" placeholder="请输入管理密码" required>
+        </div>
+        <button type="submit" class="btn-primary">登录</button>
+      </form>
+      <div class="message" id="loginMsg"></div>
+      <p style="text-align:center;color:#aaa;font-size:13px;margin-top:16px;">默认密码：admin123</p>
+    </div>
+  </div>
+
+  <!-- 主界面 -->
+  <div class="admin-container" id="adminMain" style="display:none;">
+    <div class="admin-header">
+      <h1>培训学时证书管理系统</h1>
+      <div class="nav">
+        <button data-panel="dashboard" class="active">仪表盘</button>
+        <button data-panel="data">数据管理</button>
+        <button data-panel="projects">项目配置</button>
+        <button data-panel="template">模板配置</button>
+        <button data-panel="export">批量导出</button>
+        <button data-panel="settings">系统设置</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- 仪表盘 -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="panel-card">
+          <h2>使用指南</h2>
+          <div class="desc">按以下步骤操作，即可让老师下载学时证书</div>
+          <div style="line-height:2;font-size:14px;color:#555;">
+            <p><strong>第一步：</strong>进入「项目配置」，确认 8 个培训项目的名称、日期、学时与编号规则</p>
+            <p><strong>第二步：</strong>进入「数据管理」，上传包含学员信息的 Excel 表格（需包含：姓名、身份证号、培训项目。其他列可选）</p>
+            <p><strong>第三步：</strong>进入「模板配置」，上传证书背景图片（已根据你提供的 Word 模板生成白底模板），然后在图片上拖拽调整文字字段位置</p>
+            <p><strong>第四步：</strong>保存配置后，将学员端链接 <a id="studentLink" href="/" target="_blank">学员端</a> 发给老师们，他们输入姓名和身份证号即可下载证书</p>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h2>发布到公网</h2>
+          <div class="desc">配置完成后，点击下方按钮将证书系统发布到公网，生成一个链接发给所有老师</div>
+          <button class="btn-primary" id="publishBtn" style="max-width:300px;">发布到公网</button>
+          <div id="publishResult" style="margin-top:16px;"></div>
+        </div>
+      </div>
+
+      <!-- 数据管理 -->
+      <div class="admin-panel" id="panel-data">
+        <div class="panel-card">
+          <h2>上传学员数据</h2>
+          <div class="desc">上传 Excel 表格，系统会自动解析学员信息、按项目生成证书编号和学时。支持 .xlsx 和 .xls 格式</div>
+          <div class="upload-area" id="excelUploadArea">
+            <div class="upload-icon">&#128202;</div>
+            <p>点击或拖拽 Excel 文件到此处上传</p>
+            <p class="hint-small">必须包含：姓名、身份证号、培训项目。可选：性别、乡镇、学校、学时（学时将被自动计算覆盖）</p>
+          </div>
+          <input type="file" id="excelInput" accept=".xlsx,.xls" style="display:none;">
+          <div id="excelResult" style="margin-top:16px;"></div>
+        </div>
+        <div class="panel-card">
+          <h2>学员列表</h2>
+          <div class="desc">已导入的学员数据，可在搜索框中查找</div>
+          <div class="form-group" style="margin-bottom:12px;">
+            <input type="text" id="searchInput" placeholder="输入姓名搜索...">
+          </div>
+          <div class="table-wrap">
+            <table class="data-table" id="studentTable">
+              <thead>
+                <tr>
+                  <th>序号</th><th>姓名</th><th>性别</th><th>身份证号</th>
+                  <th>所属乡镇</th><th>学校</th><th>培训项目</th><th>学时</th><th>证书编号</th>
+                </tr>
+              </thead>
+              <tbody id="studentTbody"></tbody>
+            </table>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:12px;">
+            <button class="btn-secondary" id="clearStudentsBtn">清空所有数据</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 项目配置 -->
+      <div class="admin-panel" id="panel-projects">
+        <div class="panel-card">
+          <h2>培训项目配置</h2>
+          <div class="desc">设置 8 个培训项目的名称、培训日期、学时。上传 Excel 后系统会根据这里的配置自动匹配项目、计算学时、生成证书编号</div>
+          <div id="projectsEditor"></div>
+          <div style="margin-top:16px;display:flex;gap:12px;">
+            <button class="btn-primary" id="saveProjectsBtn">保存项目配置</button>
+            <button class="btn-secondary" id="recomputeBtn">重新计算所有证书编号</button>
+          </div>
+          <div id="projectsSaveMsg" style="margin-top:12px;font-size:13px;"></div>
+        </div>
+      </div>
+
+      <!-- 模板配置 -->
+      <div class="admin-panel" id="panel-template">
+        <div class="panel-card">
+          <h2>上传证书模板</h2>
+          <div class="desc">上传证书背景图片（JPG 或 PNG 格式），建议尺寸宽度 1200-2000 像素</div>
+          <div class="upload-area" id="templateUploadArea">
+            <div class="upload-icon">&#128247;</div>
+            <p>点击或拖拽图片文件到此处上传</p>
+            <p class="hint-small">支持 JPG / PNG 格式</p>
+          </div>
+          <input type="file" id="templateInput" accept=".jpg,.jpeg,.png" style="display:none;">
+          <div id="templateResult" style="margin-top:16px;"></div>
+          <div style="margin-top:12px;text-align:center;">
+            <button class="btn-secondary" id="generateTemplateBtn" style="color:#667eea;">没有模板？点击生成示例模板</button>
+          </div>
+        </div>
+
+        <div class="panel-card" id="editorCard" style="display:none;">
+          <h2>文字位置配置</h2>
+          <div class="desc">在证书图片上拖拽文字到合适位置，右侧可调整字体大小、颜色等属性</div>
+          <div class="editor-hint">
+            操作说明：点击右侧字段列表选中某个字段，然后在左侧图片上拖拽定位。也可直接在图片上点击文字位置进行选中拖拽。修改属性后预览实时更新。
+          </div>
+          <div class="editor-layout">
+            <div class="editor-canvas-wrap">
+              <canvas id="editorCanvas"></canvas>
+            </div>
+            <div class="editor-sidebar">
+              <div class="field-list" id="fieldList"></div>
+              <div id="fieldEditor" style="margin-top:16px;"></div>
+              <button class="btn-primary mt-16" id="saveConfigBtn" style="width:100%;">保存配置</button>
+              <p id="saveMsg" style="text-align:center;margin-top:8px;font-size:13px;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 批量导出 -->
+      <div class="admin-panel" id="panel-export">
+        <div class="panel-card">
+          <h2>批量导出证书</h2>
+          <div class="desc">
+            在本机批量生成学时证书图片，并打包为 ZIP 下载。导出的压缩包内按「乡镇 / 培训项目」两级文件夹分类，例如：<br>
+            <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;display:inline-block;margin-top:6px;">曹里乡 / 义务教育新课标解读培训 / 张三-NLTS4124XP02001.jpg</code><br>
+            <span style="color:#059669;">全部在本机浏览器内完成，学员信息不会上传到任何外部服务器。</span>
+          </div>
+
+          <div class="form-group" style="margin-top:16px;">
+            <label>选择要导出的乡镇</label>
+            <select id="exportTownshipSelect" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:6px;font-size:14px;">
+              <option value="">加载中...</option>
+            </select>
+          </div>
+
+          <div id="exportSummary" style="margin:12px 0;font-size:14px;color:#555;"></div>
+
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <button class="btn-primary" id="startExportBtn" style="width:auto;padding:12px 32px;">开始导出</button>
+            <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#666;cursor:pointer;">
+              <input type="checkbox" id="exportPngChk"> 导出为 PNG（更清晰、体积更大，默认 JPG）
+            </label>
+          </div>
+
+          <div id="exportProgress" style="margin-top:16px;display:none;">
+            <div style="background:#eee;border-radius:8px;overflow:hidden;height:22px;">
+              <div id="exportProgressBar" style="height:100%;width:0%;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .2s;"></div>
+            </div>
+            <p id="exportProgressText" style="margin-top:8px;font-size:13px;color:#555;text-align:center;"></p>
+          </div>
+
+          <div id="exportResult" style="margin-top:16px;"></div>
+
+          <!-- 隐藏画布用于渲染证书 -->
+          <canvas id="exportCanvas" style="display:none;"></canvas>
+        </div>
+      </div>
+
+      <!-- 系统设置 -->
+      <div class="admin-panel" id="panel-settings">
+        <div class="panel-card">
+          <h2>机构名称</h2>
+          <div class="desc">显示在证书上的培训机构名称</div>
+          <div class="form-group">
+            <input type="text" id="orgNameInput" placeholder="如：扶沟县教师进修学校">
+          </div>
+          <button class="btn-primary" id="saveOrgBtn" style="width:auto;padding:10px 24px;">保存</button>
+        </div>
+        <div class="panel-card">
+          <h2>证书编号前缀</h2>
+          <div class="desc">证书编号中固定不变的部分，后续 5 位由系统自动生成（项目编号 2 位 + 学员序号 3 位）</div>
+          <div class="form-group">
+            <input type="text" id="certificatePrefixInput" placeholder="如：NLTS4124XP">
+          </div>
+          <button class="btn-primary" id="savePrefixBtn" style="width:auto;padding:10px 24px;">保存</button>
+        </div>
+        <div class="panel-card">
+          <h2>修改管理密码</h2>
+          <div class="desc">修改后台登录密码，请妥善保管</div>
+          <div class="form-group">
+            <label>新密码</label>
+            <input type="password" id="newPassword" placeholder="输入新密码">
+          </div>
+          <button class="btn-primary" id="changePwdBtn" style="width:auto;padding:10px 24px;">修改密码</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/jszip.min.js"></script>
+  <script src="js/certificate.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/export.js"></script>
+</body>
+</html>

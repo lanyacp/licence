@@ -1,0 +1,116 @@
+{
+  "adminPassword": "admin123",
+  "templateUploaded": true,
+  "orgName": "xx县教师进修学校",
+  "certificatePrefix": "NLTS4124XP",
+  "projects": [
+    {
+      "number": "01",
+      "name": "中小学教师师德师风建设专项培训（第一期）",
+      "startDate": "2025-07-07",
+      "endDate": "2025-07-07",
+      "hours": 8
+    },
+    {
+      "number": "02",
+      "name": "中小学教师师德师风建设专项培训（第二期）",
+      "startDate": "2025-07-08",
+      "endDate": "2025-07-09",
+      "hours": 16
+    },
+    {
+      "number": "03",
+      "name": "新入职教师能力提升培训",
+      "startDate": "2025-07-10",
+      "endDate": "2025-07-13",
+      "hours": 32
+    },
+    {
+      "number": "04",
+      "name": "核心能力导向的小学班主任培训",
+      "startDate": "2025-07-15",
+      "endDate": "2025-07-16",
+      "hours": 16
+    },
+    {
+      "number": "05",
+      "name": "核心能力导向的中学班主任培训",
+      "startDate": "2025-07-17",
+      "endDate": "2025-07-18",
+      "hours": 16
+    },
+    {
+      "number": "06",
+      "name": "初中数学聚焦核心素养赋能学科课堂",
+      "startDate": "2025-07-19",
+      "endDate": "2025-07-20",
+      "hours": 16
+    },
+    {
+      "number": "07",
+      "name": "初中语文聚焦核心素养赋能学科课堂",
+      "startDate": "2025-07-21",
+      "endDate": "2025-07-22",
+      "hours": 16
+    },
+    {
+      "number": "08",
+      "name": "初中英语聚焦核心素养赋能学科课堂",
+      "startDate": "2025-07-23",
+      "endDate": "2025-07-24",
+      "hours": 16
+    }
+  ],
+  "fields": [
+    {
+      "key": "certificateNumber",
+      "label": "证书编号",
+      "x": 0.82,
+      "y": 0.37,
+      "fontSize": 20,
+      "color": "#000000",
+      "fontFamily": "SimSun",
+      "align": "right",
+      "fontWeight": "normal",
+      "lineHeight": 1.5
+    },
+    {
+      "key": "bodyText",
+      "label": "证书正文",
+      "x": 0.15,
+      "y": 0.46,
+      "fontSize": 24,
+      "color": "#000000",
+      "fontFamily": "SimSun",
+      "align": "left",
+      "fontWeight": "normal",
+      "lineHeight": 1.4,
+      "maxWidth": 0.69,
+      "firstLineIndent": 2
+    },
+    {
+      "key": "orgName",
+      "label": "XX教师进修学校",
+      "x": 0.83,
+      "y": 0.65,
+      "fontSize": 20,
+      "color": "#000000",
+      "fontFamily": "SimSun",
+      "align": "right",
+      "fontWeight": "normal",
+      "lineHeight": 1.5
+    },
+    {
+      "key": "issueDate",
+      "label": "发证日期",
+      "x": 0.81,
+      "y": 0.71,
+      "fontSize": 20,
+      "color": "#000000",
+      "fontFamily": "SimSun",
+      "align": "right",
+      "fontWeight": "normal",
+      "lineHeight": 1.5
+    }
+  ]
+}
